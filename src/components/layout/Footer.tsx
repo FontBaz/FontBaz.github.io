@@ -24,10 +24,10 @@ export default function Footer() {
         i === 0 ? (
           part
         ) : (
-          <>
+          <div key="bluh-bluh-bluh">
             {githubLink}
             {part}
-          </>
+          </div>
         )
       )}
     </footer>
