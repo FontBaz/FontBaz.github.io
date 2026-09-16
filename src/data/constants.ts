@@ -167,6 +167,7 @@ export const T: Record<Language, Record<string, string>> = {
     copied: "Copied!",
     pinFont: "Pin font",
     unpinFont: "Unpin font",
+    footerStar: "Don't forget to star us on {github} :)",
   },
   fa: {
     brand: "فونت‌سرا",
@@ -195,6 +196,7 @@ export const T: Record<Language, Record<string, string>> = {
     copied: "رونویسی شد!",
     pinFont: "سنجاق کردن",
     unpinFont: "برداشتن سنجاق",
+    footerStar: "ستاره دادن به ما در {github} فراموش نشه :)",
   },
 };
 
