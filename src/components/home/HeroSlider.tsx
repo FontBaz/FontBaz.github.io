@@ -18,7 +18,11 @@ function resolveSlideFontName(
   lang: Language
 ): string {
   const rawFontName = font ? (font.name?.[lang] ?? slide.family) : slide.family;
-  return T[lang].font + rawFontName;
+  if ( lang === "en" ) {
+    return `${rawFontName} ${T[lang].font}`;
+  } else {
+    return `${T[lang].font} ${rawFontName}`;
+  }
 }
 
 export default function HeroSlider() {
