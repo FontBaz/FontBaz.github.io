@@ -233,13 +233,13 @@ export function formatWeightsText(
 ): string {
   if (!font) return "";
   if (isVariable(font)) {
-    return lang === "fa" ? "متغیر" : "Variable";
+    return T[lang].variable
   }
 
   const count = Array.isArray(font.weights) ? font.weights.length : 1;
 
   if (lang === "fa") {
-    return `${count} وزن`;
+    return `${count} ${T[lang].weights}`;
   }
 
   const wWord = count === 1 ? "weight" : "weights";
