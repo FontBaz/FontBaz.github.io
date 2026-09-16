@@ -6,7 +6,7 @@ import type { Font, HeroSlide, Language } from "../../types";
 
 import { useAppearance } from "../../context/appearance-context";
 import { useFontCatalog, useFontExplore } from "../../context/font-context";
-import { HERO_SLIDES, T } from "../../data/constants";
+import { HERO_SLIDES, SLIDES_DIR, T } from "../../data/constants";
 import { formatWeightsText } from "../../utils/fontUtils";
 import { shuffleByKey } from "../../utils/shuffle";
 
@@ -18,7 +18,7 @@ function resolveSlideFontName(
   lang: Language
 ): string {
   const rawFontName = font ? (font.name?.[lang] ?? slide.family) : slide.family;
-  if ( lang === "en" ) {
+  if (lang === "en") {
     return `${rawFontName} ${T[lang].font}`;
   } else {
     return `${T[lang].font} ${rawFontName}`;
@@ -77,7 +77,10 @@ export default function HeroSlider() {
             const isActive = index === selectedIndex;
             const fontName = resolveSlideFontName(font, slide, lang);
             const weightsText = formatWeightsText(font, lang);
-            const imageSrc = `${(import.meta.env.BASE_URL || "/").replace(/\/$/, "")}/images/slides/${slide.image}`;
+            const imageSrc =
+              (import.meta.env.BASE_URL || "/").replace(/\/$/, "") +
+              SLIDES_DIR +
+              slide.image;
 
             return (
               <div
