@@ -193,7 +193,7 @@ export const T: Record<Language, Record<string, string>> = {
     note: "یادداشت",
     designer: "طراح",
     languages: "پشتیبانی",
-    license: "پروانه",
+    license: "مجوز",
     weights: "وزن",
     copyCss: "رونویسی CSS",
     copied: "رونویسی شد!",
@@ -226,7 +226,7 @@ export const FAQ: FaqItem[] = [
       en: "What's the difference between free and open-licensed fonts?",
     },
     a: {
-      fa: "شما با فونت‌های رایگان موجود در اینترنت فقط مجوز استفاده شخصی دارید (مگر اینکه فونت رو خریداری کنید)، ولی با فونت‌هایی که مجوز آزاد دارن می‌تونید کتاب چاپ کنید، پوستر تجاری طراحی کنید و…\nولی پیش از استفاده تجاری؛ بهتره پروانه خود فونت رو بررسی کنید.",
+      fa: "شما با فونت‌های رایگان موجود در اینترنت فقط مجوز استفاده شخصی دارید (مگر اینکه فونت رو خریداری کنید)، ولی با فونت‌هایی که مجوز آزاد دارن می‌تونید کتاب چاپ کنید، پوستر تجاری طراحی کنید و…\nولی پیش از استفاده تجاری؛ بهتره مجوز خود فونت رو بررسی کنید.",
       en: "With free fonts found on the internet you typically only have personal-use rights (unless you purchase the font), but with open-licensed fonts you can print books, design corporate posters, and more.\nStill, before commercial use, it's best to check the font's own license.",
     },
   },
