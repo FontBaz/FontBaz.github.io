@@ -47,7 +47,7 @@ export default function Header() {
       ref={headerRef}
       className="bg-surface border-border sticky top-0 z-30 border-b py-4 transition-all duration-300"
     >
-      <div className="container-main flex items-center justify-between px-10 dark:invert">
+      <div className="container-main flex items-center justify-between px-10">
         <a
           href="/"
           className="text-primary hover:text-strong font-inherit flex cursor-pointer items-center border-none bg-transparent p-0 text-[1.05rem] font-bold tracking-tight no-underline transition-colors"
