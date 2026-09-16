@@ -17,7 +17,7 @@ export type FontAxisDef = {
 export type FontAxisOption = {
   id: string;
   suffix: string;
-  name: { fa: string; en: string };
+  name: string;
 };
 
 export type Font = {

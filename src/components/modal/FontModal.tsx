@@ -291,7 +291,7 @@ function SpecimenControls({
         >
           {axes.map(a => (
             <option key={a.id} value={a.id}>
-              {a.name[lang]}
+              {a.name}
             </option>
           ))}
         </select>

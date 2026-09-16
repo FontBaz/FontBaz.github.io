@@ -1,3 +1,5 @@
+import { useAppearance } from "../context/appearance-context";
+import { T } from "../data/constants";
 import type { Font, FontAxisOption, FontMeta, Language } from "../types";
 
 export function normalizePersian(text?: string | null): string {
@@ -158,12 +160,14 @@ export function isVariable(font?: Font | null): boolean {
 function axesForVariableFont(font: Font): FontAxisOption[] {
   const result: FontAxisOption[] = [];
 
+  const { lang } = useAppearance();
+  const defaultWord = T[lang].default;
+
   font.axes?.forEach(axis => {
     const tag = axis.tag || "DSTY";
     const min = axis.min ?? 1;
     const max = axis.max ?? 1;
-    const nameFa = axis.name?.fa ?? tag;
-    const nameEn = axis.name?.en ?? tag;
+    const axisName = axis.name?.[lang] ?? tag;
 
     for (let v = min; v <= max; v++) {
       let id: string;
@@ -176,13 +180,13 @@ function axesForVariableFont(font: Font): FontAxisOption[] {
         id = `${tag}:${v}`;
       }
 
-      const labelFa = v === min ? `${nameFa} ${v} (پیش‌فرض)` : `${nameFa} ${v}`;
-      const labelEn = v === min ? `${nameEn} ${v} (Default)` : `${nameEn} ${v}`;
+      const name =
+        v === min ? `${axisName} ${v} (${defaultWord})` : `${axisName} ${v}`;
 
       result.push({
         id,
         suffix: id,
-        name: { fa: labelFa, en: labelEn },
+        name,
       });
     }
   });
@@ -192,19 +196,20 @@ function axesForVariableFont(font: Font): FontAxisOption[] {
 
 function optionsForStaticStyles(font: Font): FontAxisOption[] {
   const result: FontAxisOption[] = [];
+  const { lang } = useAppearance();
 
   font.styles?.forEach(st => {
     if (!st) {
       result.push({
         id: "default",
         suffix: "",
-        name: { fa: "معمولی", en: "Normal" },
+        name: T[lang].normal,
       });
     } else {
       result.push({
         id: st,
         suffix: st,
-        name: { fa: st, en: st },
+        name: T[lang].normal,
       });
     }
   });
