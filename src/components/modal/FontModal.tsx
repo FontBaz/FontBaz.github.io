@@ -131,7 +131,8 @@ type ModalInitSetters = {
 
 function useModalDefaults(
   modalFont: Font | null,
-  setters: ModalInitSetters
+  setters: ModalInitSetters,
+  lang: Language
 ): void {
   const settersRef = useRef(setters);
 
@@ -143,7 +144,7 @@ function useModalDefaults(
     if (!modalFont) return;
 
     const { current } = settersRef;
-    const axes = getFontAxes(modalFont);
+    const axes = getFontAxes(modalFont, lang);
     const initialAxis = axes.length ? axes[0].id : null;
 
     current.setAxis(initialAxis);
@@ -722,7 +723,7 @@ export default function FontModal() {
     setAxis: setModalAxis,
     setWeight: setModalWeight,
     setPage: setModalPage,
-  });
+  }, lang);
 
   const handleClose = useCallback(() => {
     if (isClosing) return;
@@ -738,7 +739,7 @@ export default function FontModal() {
   if (!activeFont) return null;
 
   const font = activeFont;
-  const axes = getFontAxes(font);
+  const axes = getFontAxes(font, lang);
   const weights = availableWeights(font, modalAxis);
   const slideList = weights.length > 1 ? [0, 1, 2] : [0, 2];
   const currentSlide = slideList[modalPage] ?? 0;

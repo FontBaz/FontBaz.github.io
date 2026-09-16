@@ -157,10 +157,9 @@ export function isVariable(font?: Font | null): boolean {
   return Boolean(font?.isVariable);
 }
 
-function axesForVariableFont(font: Font): FontAxisOption[] {
+function axesForVariableFont(font: Font, lang: Language): FontAxisOption[] {
   const result: FontAxisOption[] = [];
 
-  const { lang } = useAppearance();
   const defaultWord = T[lang].default;
 
   font.axes?.forEach(axis => {
@@ -217,9 +216,9 @@ function optionsForStaticStyles(font: Font): FontAxisOption[] {
   return result;
 }
 
-export function getFontAxes(font?: Font | null): FontAxisOption[] {
+export function getFontAxes(font: Font | null, lang: Language): FontAxisOption[] {
   if (!font) return [];
-  if (font.axes?.length) return axesForVariableFont(font);
+  if (font.axes?.length) return axesForVariableFont(font, lang);
   if (font.styles?.length) return optionsForStaticStyles(font);
   return [];
 }
