@@ -618,7 +618,7 @@ function FontInfoRows({
 
       {font.license && (
         <InfoRow
-          label={t.licenseLabel}
+          label={t.license}
           title={licenseNote}
           interactive
           valueClassName="border-text-primary/40 hover:border-text-primary border-b border-dashed font-mono text-xs transition-colors"
