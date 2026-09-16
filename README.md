@@ -8,7 +8,7 @@
 
 ## Overview
 
-**FontSara** (فونت‌سرا) is a modern, bilingual (Persian / English) web application that lets designers and developers discover, preview, filter, and download high-quality free & open-source Persian fonts.
+**FontBaz** (فونت‌باز) is a modern, bilingual (Persian / English) web application that lets designers and developers discover, preview, filter, and download high-quality free & open-source Persian fonts.
 
 It acts as a living specimen library: fonts are loaded dynamically from a curated open dataset, rendered with real typefaces, and can be explored with advanced filters, live preview text, variable-font axes, and one-click CSS generation.
 
@@ -57,8 +57,8 @@ It acts as a living specimen library: fonts are loaded dynamically from a curate
 
 ```bash
 # Clone the repository
-git clone https://github.com/FontSara/FontSara.github.io
-cd ./FontSara.github.io/
+git clone https://github.com/FontBaz/FontBaz.github.io
+cd ./FontBaz.github.io/
 
 # Install dependencies
 pnpm install

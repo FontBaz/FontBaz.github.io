@@ -56,6 +56,7 @@ export default function Header() {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
+          <img src="/images/icon.png" className="h-8 dark:invert" alt="" />
           {T[lang].brand}
         </a>
 

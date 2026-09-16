@@ -141,9 +141,9 @@ export const ENGLISH_SYMS = "$ @ ﷼ & % # * + − = / \\ < > { } [ ]";
 
 export const T: Record<Language, Record<string, string>> = {
   en: {
-    brand: "FontSara",
+    brand: "FontBaz",
     hero: "Write Persian, more beautifully",
-    sub: "A collection of free and open Persian fonts for developers and designers.",
+    sub: "A collection of free and open-licensed Persian fonts for developers and designers.",
     explore: "Explore fonts",
     nameSearch: "Search font names…",
     style: "Style",
@@ -175,9 +175,9 @@ export const T: Record<Language, Record<string, string>> = {
 
   },
   fa: {
-    brand: "فونت‌سرا",
+    brand: "فونت‌باز",
     hero: "فارسی را زیباتر بنویسید",
-    sub: "مجموعه‌ای از فونت‌های آزاد و رایگان فارسی برای توسعه‌دهندگان و طراحان.",
+    sub: "مجموعه‌ای از فونت‌های فارسی رایگان و دارای مجوز باز برای توسعه‌دهندگان و طراحان.",
     explore: "کاوش در فونت‌ها",
     nameSearch: "جستجو نام فونت‌ها…",
     style: "سبک",
