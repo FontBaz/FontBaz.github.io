@@ -43,19 +43,19 @@ export const LICENSE_NOTES: Record<
 > = {
   OFL: {
     en: "Open, free for any use; modifiable and redistributable with credit",
-    fa: "آزاد، رایگان برای هر کاربرد؛ قابل تغییر و بازتوزیع با ذکر منبع",
+    fa: "آزاد و رایگان؛ قابل تغییر و توزیع با اشاره به منبع",
   },
   GPL: {
     en: "Free, copyleft; derivatives must stay under GPL",
-    fa: "آزاد، کپی‌لفت؛ مشتقات باید تحت GPL بمانند",
+    fa: "آزاد با شرط کپی‌لفت؛ مشتقات باید GPL بمانند",
   },
   Apache: {
     en: "Open, permissive; keep the notice",
-    fa: "آزاد، مجوز؛ حفظ اعلان",
+    fa: "آزاد و مجاز؛ اعلان را حفظ کنید",
   },
   BVL: {
     en: "Free for personal and commercial use",
-    fa: "آزاد برای استفاده شخصی و تجاری",
+    fa: "رایگان برای استفاده شخصی و تجاری",
   },
 };
 
@@ -65,32 +65,32 @@ export const STYLE_NOTES: Record<
 > = {
   sans: {
     en: "Clean, modern sans-serif with even strokes",
-    fa: "سنسِ مدرن و تمیز با خطوطی یکنواخت",
+    fa: "سنس مدرن و تمیز با خطوط یکنواخت",
   },
   serif: {
     en: "Traditional serif with finishing strokes",
-    fa: "سریف سنتی با انتهای خطوط تزئینی",
+    fa: "سریف سنتی با انتهای تزئینی",
   },
   display: {
     en: "Bold display face for headlines and posters",
-    fa: "فونتِ نمایشیِ درشت برای تیتر و پوستر",
+    fa: "فونت درشت برای سرتیتر و تبلیغات",
   },
   decorative: {
     en: "Decorative; Suited for special designs",
-    fa: "تزئینی؛ مناسب طراحی‌های خاص",
+    fa: "تزئینی؛ برای طراحی‌های خاص",
   },
   monospace: {
     en: "Fixed-width; every glyph shares the same advance",
     fa: "هر نویسه پهنای برابر دارد",
   },
-  nastaliq: { en: "Persian calligraphic script", fa: "خط خوشنویسی فارسی" },
+  nastaliq: { en: "Persian calligraphic script", fa: "خط نستعلیق" },
   pixel: {
     en: "Pixel glyphs reminiscent of retro games",
-    fa: "حروف پیکسلی شبیه به بازی‌های قدیمی",
+    fa: "حروف پیکسلی؛ سبک بازی‌های قدیم",
   },
   casual: {
     en: "Friendly, informal everyday face",
-    fa: "دوستانه و غیررسمی برای استفادهٔ روزمره",
+    fa: "دوستانه و غیررسمی برای روزمره",
   },
 };
 
@@ -170,8 +170,7 @@ export const T: Record<Language, Record<string, string>> = {
     faq: "FAQ",
     default: "Default",
     normal: "Normal",
-    font: "Font"
-
+    font: "Font",
   },
   fa: {
     brand: "فونت‌باز",
@@ -203,7 +202,7 @@ export const T: Record<Language, Record<string, string>> = {
     faq: "پرسش‌های متداول",
     default: "پیشفرض",
     normal: "معمولی",
-    font: "فونت"
+    font: "فونت",
   },
 };
 
