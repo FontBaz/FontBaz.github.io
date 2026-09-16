@@ -245,10 +245,3 @@ export const FAQ: FaqItem[] = [
 ];
 
 export const GH_URL = "https://github.com/alr-rashidi/Awesome-Persian-Fonts";
-export const WOFF2_BASE_URL =
-  "https://cdn.jsdelivr.net/gh/alr-rashidi/Awesome-Persian-Fonts/data/woff2/";
-
-export const PREVIEW_SIZE_PRESETS: number[] = [
-  8, 9, 10, 11, 12, 14, 16, 18, 20, 24, 28, 32, 40, 48, 56, 64, 72, 80, 96, 112,
-  128, 144, 160, 192, 224, 256, 288, 300,
-];
