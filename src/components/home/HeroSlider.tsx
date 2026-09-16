@@ -6,7 +6,7 @@ import type { Font, HeroSlide, Language } from "../../types";
 
 import { useAppearance } from "../../context/appearance-context";
 import { useFontCatalog, useFontExplore } from "../../context/font-context";
-import { HERO_SLIDES } from "../../data/constants";
+import { HERO_SLIDES, T } from "../../data/constants";
 import { formatWeightsText } from "../../utils/fontUtils";
 import { shuffleByKey } from "../../utils/shuffle";
 
@@ -17,8 +17,8 @@ function resolveSlideFontName(
   slide: HeroSlide,
   lang: Language
 ): string {
-  const rawName = font ? (font.name?.[lang] ?? slide.family) : slide.family;
-  return lang === "fa" ? `فونت ${rawName}` : `${rawName} font`;
+  const rawFontName = font ? (font.name?.[lang] ?? slide.family) : slide.family;
+  return T[lang].font + rawFontName;
 }
 
 export default function HeroSlider() {
@@ -83,11 +83,10 @@ export default function HeroSlider() {
                 <div
                   role="button"
                   tabIndex={0}
-                  className={`relative h-40 w-full cursor-pointer overflow-hidden rounded-2xl bg-white transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] sm:h-56 md:h-64 dark:bg-black ${
-                    isActive
+                  className={`relative h-40 w-full cursor-pointer overflow-hidden rounded-2xl bg-white transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] sm:h-56 md:h-64 dark:bg-black ${isActive
                       ? "group scale-100 opacity-100"
                       : "scale-90 opacity-50"
-                  }`}
+                    }`}
                   onClick={() => {
                     if (isActive && font) {
                       modal.open(font);
@@ -104,9 +103,8 @@ export default function HeroSlider() {
                   }}
                 >
                   <img
-                    className={`block h-full w-full object-cover transition-transform duration-300 dark:invert ${
-                      isActive ? "group-hover:-translate-y-6" : ""
-                    }`}
+                    className={`block h-full w-full object-cover transition-transform duration-300 dark:invert ${isActive ? "group-hover:-translate-y-6" : ""
+                      }`}
                     src={imageSrc}
                     alt={fontName}
                     loading="eager"
@@ -114,11 +112,10 @@ export default function HeroSlider() {
                   />
 
                   <div
-                    className={`pointer-events-none absolute inset-x-0 bottom-0 flex h-14 translate-y-full items-end justify-between bg-linear-to-t from-white via-white/95 to-transparent px-5 pb-3 opacity-0 transition-all duration-300 dark:from-black dark:via-black/95 ${
-                      isActive
+                    className={`pointer-events-none absolute inset-x-0 bottom-0 flex h-14 translate-y-full items-end justify-between bg-linear-to-t from-white via-white/95 to-transparent px-5 pb-3 opacity-0 transition-all duration-300 dark:from-black dark:via-black/95 ${isActive
                         ? "group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100"
                         : ""
-                    }`}
+                      }`}
                     dir={lang === "fa" ? "rtl" : "ltr"}
                   >
                     <span className="text-strong font-fa truncate text-sm font-bold sm:text-base">

@@ -170,7 +170,8 @@ export const T: Record<Language, Record<string, string>> = {
     footerStar: "Don't forget to star us on {github} :)",
     faq: "FAQ",
     default: "Default",
-    normal: "Normal"
+    normal: "Normal",
+    font: "Font"
 
   },
   fa: {
@@ -203,7 +204,8 @@ export const T: Record<Language, Record<string, string>> = {
     footerStar: "ستاره دادن به ما در {github} فراموش نشه :)",
     faq: "پرسش‌های متداول",
     default: "پیشفرض",
-    normal: "معمولی"
+    normal: "معمولی",
+    font: "فونت"
   },
 };
 
