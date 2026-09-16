@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { FaqItem, Language } from "../../types";
 
 import { useAppearance } from "../../context/appearance-context";
-import { FAQ } from "../../data/constants";
+import { FAQ, T } from "../../data/constants";
 
 function renderFaqAnswer(item: FaqItem, lang: Language): { __html: string } {
   const text = item.a[lang] || "";
@@ -34,7 +34,7 @@ export default function FaqSection() {
   return (
     <section className="container-main my-16 px-6" id="faq">
       <h2 className="text-strong font-fa mb-6 text-center text-2xl font-bold">
-        {lang === "fa" ? "پرسش‌های رایج" : "FAQ"}
+        {T[lang].faq}
       </h2>
 
       <div className="flex flex-col gap-3">
@@ -59,11 +59,10 @@ export default function FaqSection() {
               </button>
 
               <div
-                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
-                  isOpen
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isOpen
                     ? "grid-rows-[1fr] opacity-100"
                     : "pointer-events-none grid-rows-[0fr] opacity-0"
-                }`}
+                  }`}
               >
                 <div className="overflow-hidden">
                   <div className="px-5 pt-1 pb-5">
