@@ -1,0 +1,346 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(html.dark, html.dark *));
+
+@theme {
+  --color-surface: var(--surface);
+  --color-surface-deep: var(--surface-deep);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-tertiary: var(--text-tertiary);
+  --color-strong: var(--text-strong);
+  --color-card-bg: var(--card-bg);
+  --color-border: var(--border);
+  --color-backdrop: var(--backdrop);
+  --color-modal-header-bg: var(--modal-header-bg);
+  --color-modal-body-bg: var(--modal-body-bg);
+
+  --font-ui: var(--font-ui);
+  --font-fa: var(--font-fa);
+}
+
+@layer utilities {
+  .container-main {
+    @apply mx-auto w-full max-w-6xl;
+  }
+}
+
+@font-face {
+  font-family: "AradVF";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src:
+    local("AradVF"),
+    local("Arad VF"),
+    url("https://cdn.jsdelivr.net/gh/alr-rashidi/Awesome-Persian-Fonts/data/woff2/aradvf.woff2") format("woff2"),
+    url("https://cdn.jsdelivr.net/gh/MohamadDarvishi/Arad@main/Fonts/Main_Fonts/AradVF.woff2") format("woff2");
+}
+
+:root {
+  --surface: #f7f7f7;
+  --surface-deep: #ebebeb;
+  --text-primary: #404040;
+  --text-secondary: #737373;
+  --text-tertiary: #a3a3a3;
+  --text-strong: #171717;
+  --card-bg: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+  --backdrop: rgba(0, 0, 0, 0.5);
+  --modal-header-bg: #ffffff;
+  --modal-body-bg: #f7f7f7;
+  --header-h: 64px;
+  --font-ui:
+    "AradVF", "Arad", "Vazirmatn", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-fa:
+    "AradVF", "Arad", "Vazirmatn", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Tahoma, sans-serif;
+}
+
+html.dark {
+  --surface: #141414;
+  --surface-deep: #1f1f1f;
+  --text-primary: #d4d4d4;
+  --text-secondary: #a3a3a3;
+  --text-tertiary: #737373;
+  --text-strong: #f5f5f5;
+  --card-bg: #1c1c1c;
+  --border: rgba(255, 255, 255, 0.1);
+  --backdrop: rgba(0, 0, 0, 0.7);
+  --modal-header-bg: #1c1c1c;
+  --modal-body-bg: #141414;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--surface);
+}
+
+body {
+  background-color: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+html[dir="rtl"] body {
+  font-family: var(--font-fa);
+}
+
+::selection {
+  background-color: var(--text-primary);
+  color: var(--surface);
+}
+
+:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 3px;
+}
+
+[contenteditable],
+[contenteditable]:focus,
+[contenteditable]:focus-visible,
+[contenteditable]:focus-within,
+#modal-spec-content input:focus,
+#modal-spec-content input:focus-visible,
+#modal-spec-content [contenteditable]:focus,
+#modal-spec-content [contenteditable]:focus-visible {
+  outline: none !important;
+  border: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+html.dark .hero-slide-img,
+html.dark .style-filter-img:not(.is-selected) {
+  filter: invert(1);
+}
+
+.style-filter-img.is-selected {
+  filter: brightness(0) invert(1) !important;
+}
+
+html.dark .style-filter-img.is-selected {
+  filter: brightness(0) !important;
+}
+
+button,
+a,
+select,
+summary,
+input[type="range"],
+label,
+[role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+
+header,
+nav,
+footer,
+h1:not(.select-text),
+h2:not(.select-text),
+h3:not(.select-text),
+h4:not(.select-text),
+h5:not(.select-text),
+h6:not(.select-text),
+.hero-slide,
+.filter-chip,
+.font-badge,
+.tab-btn,
+.accordion-header {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input[type="text"],
+input[type="search"],
+textarea,
+[contenteditable],
+[contenteditable="true"],
+.selectable-text,
+code,
+pre {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+[contenteditable],
+[contenteditable="true"] {
+  cursor: text !important;
+}
+
+input[type="range"] {
+  accent-color: var(--text-secondary);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--text-secondary);
+  border: 2px solid var(--card-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background-color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--text-secondary);
+  border: 2px solid var(--card-bg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  background-color: var(--text-primary);
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.fade-end-mask {
+  -webkit-mask-image: linear-gradient(to left,
+      #000 0%,
+      #000 calc(100% - 4rem),
+      transparent 100%);
+  mask-image: linear-gradient(to left,
+      #000 0%,
+      #000 calc(100% - 4rem),
+      transparent 100%);
+}
+
+html[dir="ltr"] .fade-end-mask,
+[dir="ltr"] .fade-end-mask {
+  -webkit-mask-image: linear-gradient(to right,
+      #000 0%,
+      #000 calc(100% - 4rem),
+      transparent 100%);
+  mask-image: linear-gradient(to right,
+      #000 0%,
+      #000 calc(100% - 4rem),
+      transparent 100%);
+}
+
+@keyframes pulse-opacity {
+
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes modal-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-backdrop-exit {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modal-card-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modal-card-exit {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+}
+
+.modal-backdrop-in {
+  animation: modal-backdrop-enter 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal-backdrop-out {
+  animation: modal-backdrop-exit 200ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+.modal-card-in {
+  animation: modal-card-enter 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal-card-out {
+  animation: modal-card-exit 200ms cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+.not-loaded {
+  animation: pulse-opacity 1.5s ease-in-out infinite;
+}
