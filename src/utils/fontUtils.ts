@@ -1,4 +1,3 @@
-import { useAppearance } from "../context/appearance-context";
 import { T } from "../data/constants";
 import type { Font, FontAxisOption, FontMeta, Language } from "../types";
 
@@ -193,9 +192,8 @@ function axesForVariableFont(font: Font, lang: Language): FontAxisOption[] {
   return result;
 }
 
-function optionsForStaticStyles(font: Font): FontAxisOption[] {
+function optionsForStaticStyles(font: Font, lang: Language): FontAxisOption[] {
   const result: FontAxisOption[] = [];
-  const { lang } = useAppearance();
 
   font.styles?.forEach(st => {
     if (!st) {
@@ -219,7 +217,7 @@ function optionsForStaticStyles(font: Font): FontAxisOption[] {
 export function getFontAxes(font: Font | null, lang: Language): FontAxisOption[] {
   if (!font) return [];
   if (font.axes?.length) return axesForVariableFont(font, lang);
-  if (font.styles?.length) return optionsForStaticStyles(font);
+  if (font.styles?.length) return optionsForStaticStyles(font, lang);
   return [];
 }
 
