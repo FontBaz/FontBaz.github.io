@@ -136,7 +136,7 @@ export const DEFAULT_SPECIMEN =
   "ضحاک ژنده‌پوش، غازچرانِ خبیثِ عصمت‌السلطنه ظفرقندی جذام گرفت.";
 export const STACK_TEXT = "ضحاک ژنده‌پوش جذام گرفت";
 export const ENGLISH_TEXT = "A quick brown fox jumps over the lazy dog.";
-export const ENGLISH_NUMS = "0987654321\n۰۹۸۷۶۵۴۳۲۱";
+export const ENGLISH_NUMS = "EN:0987654321\nFA:۰۹۸۷۶۵۴۳۲۱";
 export const ENGLISH_SYMS = "$ @ ﷼ & % # * + − = / \\ < > { } [ ]";
 
 export const T: Record<Language, Record<string, string>> = {
