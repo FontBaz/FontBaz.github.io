@@ -1,5 +1,12 @@
+import type {
+  Font,
+  FontAxisOption,
+  FontMeta,
+  FontVariant,
+  Language,
+} from "../types";
+
 import { T } from "../data/constants";
-import type { Font, FontAxisOption, FontMeta, Language } from "../types";
 
 export function normalizePersian(text?: string | null): string {
   if (!text) return "";
@@ -132,6 +139,19 @@ export function isDefaultAxis(axisId: string | null): boolean {
   return !axisId || axisId === "default";
 }
 
+export function isDefaultVariant(variantId: string | null): boolean {
+  return !variantId || variantId === "default" || variantId === "normal";
+}
+
+export function variantWoff2(
+  font?: Font | null,
+  variantId: string | null = null
+): string | null {
+  if (!font || isDefaultVariant(variantId)) return null;
+  const variant = font.variants?.find(v => v.id === variantId);
+  return variant?.woff2 ?? null;
+}
+
 export function activeKeys(record: Record<string, boolean>): string[] {
   return Object.keys(record).filter(key => record[key]);
 }
@@ -214,15 +234,35 @@ function optionsForStaticStyles(font: Font, lang: Language): FontAxisOption[] {
   return result;
 }
 
-export function getFontAxes(font: Font | null, lang: Language): FontAxisOption[] {
+export function getFontAxes(
+  font: Font | null,
+  lang: Language
+): FontAxisOption[] {
   if (!font) return [];
   if (font.axes?.length) return axesForVariableFont(font, lang);
   if (font.styles?.length) return optionsForStaticStyles(font, lang);
   return [];
 }
 
-/** @deprecated Use `getFontAxes` instead. */
-export const getFontVariants = getFontAxes;
+export function getFontVariants(
+  font: Font | null,
+  lang: Language
+): FontAxisOption[] {
+  if (!font?.variants?.length) return [];
+
+  return font.variants.map((variant: FontVariant) => {
+    const { id } = variant;
+    const nameObj = variant.name;
+    const name =
+      typeof nameObj === "string" ? nameObj : (nameObj?.[lang] ?? id);
+
+    return {
+      id,
+      suffix: id,
+      name,
+    };
+  });
+}
 
 export function formatWeightsText(
   font?: Font | null,
@@ -230,7 +270,7 @@ export function formatWeightsText(
 ): string {
   if (!font) return "";
   if (isVariable(font)) {
-    return T[lang].variable
+    return T[lang].variable;
   }
 
   const count = Array.isArray(font.weights) ? font.weights.length : 1;
@@ -245,7 +285,8 @@ export function formatWeightsText(
 
 export function availableWeights(
   font?: Font | null,
-  _axisId: string | null = null
+  _axisId: string | null = null,
+  _variantId: string | null = null
 ): number[] {
   if (!font) return [400];
   if (isVariable(font)) {
@@ -258,17 +299,21 @@ export function availableWeights(
   return [400];
 }
 
+// eslint-disable-next-line max-params
 export function woff2UrlFor(
   font?: Font | null,
   weight: number = 400,
-  axisId: string | null = null
+  axisId: string | null = null,
+  variantId: string | null = null
 ): string | null {
-  if (!font?.woff2) return null;
+  const variantUrl = variantWoff2(font, variantId);
+  const baseWoff2 = variantUrl ?? font?.woff2;
+  if (!baseWoff2) return null;
   if (isVariable(font)) {
-    return font.woff2;
+    return baseWoff2;
   }
 
-  let url = font.woff2;
+  let url = baseWoff2;
 
   url = url.replace("{weight}", String(weight));
 
@@ -288,10 +333,12 @@ export function woff2UrlFor(
   return url;
 }
 
+// eslint-disable-next-line max-params
 export function fontVariationSettingsCSS(
   font?: Font | null,
   weight: number = 400,
-  axisId: string | null = null
+  axisId: string | null = null,
+  _variantId: string | null = null
 ): string {
   if (!font || !isVariable(font)) {
     return "normal";
@@ -330,13 +377,18 @@ export function fontVariationSettingsCSS(
 
 export function familyCSS(
   font?: Font | null,
-  axisId: string | null = null
+  axisId: string | null = null,
+  variantId: string | null = null
 ): string {
   if (!font) return "sans-serif";
   let fam = font.family;
 
   if (!isDefaultAxis(axisId) && !isVariable(font)) {
     fam = `${font.family}-${axisId ?? ""}`;
+  }
+
+  if (variantId && !isDefaultVariant(variantId)) {
+    fam = `${font.family}-${variantId}`;
   }
 
   const parts = [`'${fam}'`];
@@ -352,30 +404,39 @@ export function familyCSS(
   return parts.join(", ");
 }
 
+// eslint-disable-next-line complexity
 export function generateFontCSS(
   font?: Font | null,
-  axisId: string | null = null
+  axisId: string | null = null,
+  variantId: string | null = null
 ): string {
   if (!font) return "";
   const hasVar = isVariable(font);
 
   const fam =
-    axisId && !isDefaultAxis(axisId) && !hasVar
-      ? `${font.family}-${axisId}`
-      : font.family;
-  const famRule = familyCSS(font, axisId);
+    variantId && !isDefaultVariant(variantId)
+      ? `${font.family}-${variantId}`
+      : axisId && !isDefaultAxis(axisId) && !hasVar
+        ? `${font.family}-${axisId}`
+        : font.family;
+  const famRule = familyCSS(font, axisId, variantId);
 
   const fontFaces: string[] = [];
 
   if (hasVar) {
-    const url = font.woff2 ?? "";
+    const url =
+      (variantId && !isDefaultVariant(variantId)
+        ? variantWoff2(font, variantId)
+        : null) ??
+      font.woff2 ??
+      "";
     fontFaces.push(
       `@font-face {\n  font-family: '${fam}';\n  src: url('${url}') format('woff2');\n  font-weight: 100 900;\n  font-display: swap;\n}`
     );
   } else {
-    const weights = availableWeights(font, axisId);
+    const weights = availableWeights(font, axisId, variantId);
     weights.forEach(w => {
-      const url = woff2UrlFor(font, w, axisId) ?? "";
+      const url = woff2UrlFor(font, w, axisId, variantId) ?? "";
       fontFaces.push(
         `@font-face {\n  font-family: '${fam}';\n  src: url('${url}') format('woff2');\n  font-weight: ${w};\n  font-display: swap;\n}`
       );
@@ -385,7 +446,7 @@ export function generateFontCSS(
   let extraProps = "";
 
   if (hasVar) {
-    const fvs = fontVariationSettingsCSS(font, 400, axisId);
+    const fvs = fontVariationSettingsCSS(font, 400, axisId, variantId);
 
     if (fvs && fvs !== "normal") {
       extraProps = `\n  font-variation-settings: ${fvs};`;
@@ -395,19 +456,28 @@ export function generateFontCSS(
   return `${fontFaces.join("\n\n")}\n\nbody {\n  font-family: ${famRule};${extraProps}\n}`;
 }
 
+// eslint-disable-next-line max-params
 export function isFontReady(
   font?: Font | null,
   weight: number = 400,
-  axisId: string | null = null
+  axisId: string | null = null,
+  variantId: string | null = null
 ): boolean {
   if (!font) return false;
 
-  if (isDefaultAxis(axisId) && isLocallyInstalled(font.family)) return true;
+  if (
+    isDefaultAxis(axisId) &&
+    isDefaultVariant(variantId) &&
+    isLocallyInstalled(font.family)
+  )
+    return true;
   if (!font._loaded) return false;
 
+  const variantPrefix =
+    variantId && !isDefaultVariant(variantId) ? `${variantId}:` : "";
   const key = isVariable(font)
-    ? "var"
-    : `${!isDefaultAxis(axisId) ? `${axisId ?? ""}:` : ""}${weight}`;
+    ? `${variantPrefix}var`
+    : `${variantPrefix}${!isDefaultAxis(axisId) ? `${axisId ?? ""}:` : ""}${weight}`;
 
   return Boolean(font._loaded[key]);
 }
@@ -459,15 +529,22 @@ type FontLoadContext = {
   hasVar: boolean;
   axisId: string | null;
   isDefaultAxis: boolean;
+  variantId: string | null;
+  isDefaultVariant: boolean;
   weight: number;
 };
 
 function fontLoadKey(ctx: FontLoadContext): string {
-  if (ctx.hasVar) return "var";
-  return `${ctx.axisId && !ctx.isDefaultAxis ? `${ctx.axisId}:` : ""}${ctx.weight}`;
+  const variantPrefix =
+    ctx.variantId && !ctx.isDefaultVariant ? `${ctx.variantId}:` : "";
+  if (ctx.hasVar) return `${variantPrefix}var`;
+  return `${variantPrefix}${ctx.axisId && !ctx.isDefaultAxis ? `${ctx.axisId}:` : ""}${ctx.weight}`;
 }
 
 function resolvedFamilyName(ctx: FontLoadContext): string {
+  if (ctx.variantId && !ctx.isDefaultVariant) {
+    return `${ctx.font.family}-${ctx.variantId}`;
+  }
   if (ctx.axisId && !ctx.isDefaultAxis && !ctx.hasVar) {
     return `${ctx.font.family}-${ctx.axisId}`;
   }
@@ -480,14 +557,20 @@ function resolveFontSource(ctx: FontLoadContext): {
   desc: FontFaceDescriptors;
 } {
   if (ctx.hasVar) {
+    const url =
+      (ctx.variantId && !ctx.isDefaultVariant
+        ? variantWoff2(ctx.font, ctx.variantId)
+        : null) ??
+      ctx.font.woff2 ??
+      null;
     return {
-      url: ctx.font.woff2 ?? null,
+      url,
       desc: { weight: "100 900", display: "swap" },
     };
   }
 
   return {
-    url: woff2UrlFor(ctx.font, ctx.weight, ctx.axisId),
+    url: woff2UrlFor(ctx.font, ctx.weight, ctx.axisId, ctx.variantId),
     desc: { weight: String(ctx.weight), display: "swap" },
   };
 }
@@ -533,10 +616,12 @@ function loadFontFace(
   });
 }
 
+// eslint-disable-next-line max-params
 export function ensureFontLoaded(
   font?: Font | null,
   weight: number = 400,
-  axisId: string | null = null
+  axisId: string | null = null,
+  variantId: string | null = null
 ): Promise<boolean> {
   if (!font) return Promise.resolve(false);
   const ctx: FontLoadContext = {
@@ -544,6 +629,8 @@ export function ensureFontLoaded(
     hasVar: isVariable(font),
     axisId,
     isDefaultAxis: isDefaultAxis(axisId),
+    variantId,
+    isDefaultVariant: isDefaultVariant(variantId),
     weight,
   };
   const key = fontLoadKey(ctx);
@@ -552,7 +639,11 @@ export function ensureFontLoaded(
   font._loading ??= {};
 
   if (font._loaded[key]) return Promise.resolve(true);
-  if (isDefaultAxis(axisId) && isLocallyInstalled(font.family)) {
+  if (
+    isDefaultAxis(axisId) &&
+    isDefaultVariant(variantId) &&
+    isLocallyInstalled(font.family)
+  ) {
     font._loaded[key] = true;
     return Promise.resolve(true);
   }

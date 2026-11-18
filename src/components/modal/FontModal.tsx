@@ -25,6 +25,7 @@ import {
   formatWeightsText,
   generateFontCSS,
   getFontAxes,
+  getFontVariants,
   resolvePreviewSize,
 } from "../../utils/fontUtils";
 
@@ -127,6 +128,7 @@ type ModalInitSetters = {
   setAxis: (axis: string | null) => void;
   setWeight: (weight: number) => void;
   setPage: (page: number) => void;
+  setVariant: (variant: string | null) => void;
 };
 
 function useModalDefaults(
@@ -147,12 +149,16 @@ function useModalDefaults(
     const axes = getFontAxes(modalFont, lang);
     const initialAxis = axes.length ? axes[0].id : null;
 
-    current.setAxis(initialAxis);
+    const variants = getFontVariants(modalFont, lang);
+    const initialVariant = variants.length ? variants[0].id : null;
 
-    const weights = availableWeights(modalFont, initialAxis);
+    current.setAxis(initialAxis);
+    current.setVariant(initialVariant);
+
+    const weights = availableWeights(modalFont, initialAxis, initialVariant);
     current.setWeight(weights.includes(400) ? 400 : weights[0]);
     current.setPage(0);
-  }, [modalFont]);
+  }, [modalFont, lang]);
 }
 
 function buildLanguagesText(font: Font, lang: Language): string {
@@ -255,11 +261,14 @@ function SlidePager({ slideList, page, onPageChange }: SlidePagerProps) {
 }
 
 type SpecimenControlsProps = {
-  lang: Language;
+  _lang?: Language;
   currentSlide: number;
   axes: FontAxisOption[];
   axis: string | null;
   onAxisChange: (axis: string) => void;
+  variants: FontAxisOption[];
+  variant: string | null;
+  onVariantChange: (variant: string) => void;
   weights: number[];
   weight: number;
   onWeightChange: (weight: number) => void;
@@ -268,11 +277,14 @@ type SpecimenControlsProps = {
 };
 
 function SpecimenControls({
-  lang,
+  _lang,
   currentSlide,
   axes,
   axis,
   onAxisChange,
+  variants,
+  variant,
+  onVariantChange,
   weights,
   weight,
   onWeightChange,
@@ -284,6 +296,20 @@ function SpecimenControls({
       className="z-10 mb-1 flex flex-wrap items-center gap-2 pe-10 md:pe-0"
       id="spec-controls"
     >
+      {variants.length > 0 && currentSlide === 0 && (
+        <select
+          className="border-border bg-card-bg text-primary hover:border-text-secondary cursor-pointer rounded-full border px-3 py-1.5 text-xs transition-colors outline-none"
+          value={variant ?? ""}
+          onChange={e => onVariantChange(e.target.value)}
+        >
+          {variants.map(v => (
+            <option key={v.id} value={v.id}>
+              {v.name}
+            </option>
+          ))}
+        </select>
+      )}
+
       {axes.length > 0 && currentSlide === 0 && (
         <select
           className="border-border bg-card-bg text-primary hover:border-text-secondary cursor-pointer rounded-full border px-3 py-1.5 text-xs transition-colors outline-none"
@@ -334,6 +360,7 @@ type StackSlideProps = {
   weights: number[];
   fontFamilyCss: string;
   axis: string | null;
+  variant: string | null;
   stackText: string;
   onStackTextChange: (text: string) => void;
   effectiveSize: number;
@@ -344,6 +371,7 @@ function StackSlide({
   weights,
   fontFamilyCss,
   axis,
+  variant,
   stackText,
   onStackTextChange,
   effectiveSize,
@@ -362,7 +390,12 @@ function StackSlide({
             style={{
               fontFamily: fontFamilyCss,
               fontWeight: w,
-              fontVariationSettings: fontVariationSettingsCSS(font, w, axis),
+              fontVariationSettings: fontVariationSettingsCSS(
+                font,
+                w,
+                axis,
+                variant
+              ),
               fontSize: `${effectiveSize}px`,
               lineHeight: 1.25,
             }}
@@ -384,6 +417,9 @@ type SpecimenColumnProps = {
   axes: FontAxisOption[];
   axis: string | null;
   onAxisChange: (axis: string) => void;
+  variants: FontAxisOption[];
+  variant: string | null;
+  onVariantChange: (variant: string) => void;
   weights: number[];
   weight: number;
   onWeightChange: (weight: number) => void;
@@ -408,6 +444,9 @@ function SpecimenColumn({
   axes,
   axis,
   onAxisChange,
+  variants,
+  variant,
+  onVariantChange,
   weights,
   weight,
   onWeightChange,
@@ -432,11 +471,14 @@ function SpecimenColumn({
   return (
     <div className="bg-modal-header-bg border-border relative flex h-[340px] flex-shrink-0 flex-col justify-between border-b p-4 sm:p-5 md:h-full md:border-e md:border-b-0">
       <SpecimenControls
-        lang={lang}
+        _lang={lang}
         currentSlide={currentSlide}
         axes={axes}
         axis={axis}
         onAxisChange={onAxisChange}
+        variants={variants}
+        variant={variant}
+        onVariantChange={onVariantChange}
         weights={weights}
         weight={weight}
         onWeightChange={onWeightChange}
@@ -466,6 +508,7 @@ function SpecimenColumn({
             weights={weights}
             fontFamilyCss={fontFamilyCss}
             axis={axis}
+            variant={variant}
             stackText={stackText}
             onStackTextChange={onStackTextChange}
             effectiveSize={effectiveSize}
@@ -690,6 +733,7 @@ function DetailsPanel({
   );
 }
 
+// eslint-disable-next-line max-lines-per-function
 export default function FontModal() {
   const { lang } = useAppearance();
   const t = T[lang];
@@ -704,6 +748,8 @@ export default function FontModal() {
     setWeight: setModalWeight,
     axis: modalAxis,
     setAxis: setModalAxis,
+    variant: modalVariant,
+    setVariant: setModalVariant,
   } = modal;
 
   const { activeFont, isClosing } = useActiveFontTransition(modalFont);
@@ -712,18 +758,24 @@ export default function FontModal() {
   const { ready: fontLoaded, error: loadError } = useFontFace(
     activeFont,
     modalWeight,
-    modalAxis
+    modalAxis,
+    modalVariant
   );
 
   const [copied, setCopied] = useState<boolean>(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useBodyScrollLock(Boolean(activeFont));
-  useModalDefaults(modalFont, {
-    setAxis: setModalAxis,
-    setWeight: setModalWeight,
-    setPage: setModalPage,
-  }, lang);
+  useModalDefaults(
+    modalFont,
+    {
+      setAxis: setModalAxis,
+      setWeight: setModalWeight,
+      setPage: setModalPage,
+      setVariant: setModalVariant,
+    },
+    lang
+  );
 
   const handleClose = useCallback(() => {
     if (isClosing) return;
@@ -740,7 +792,8 @@ export default function FontModal() {
 
   const font = activeFont;
   const axes = getFontAxes(font, lang);
-  const weights = availableWeights(font, modalAxis);
+  const variants = getFontVariants(font, lang);
+  const weights = availableWeights(font, modalAxis, modalVariant);
   const slideList = weights.length > 1 ? [0, 1, 2] : [0, 2];
   const currentSlide = slideList[modalPage] ?? 0;
   const currentSize = sizes[currentSlide] ?? 32;
@@ -755,7 +808,7 @@ export default function FontModal() {
   };
 
   const handleCopyCSS = async () => {
-    const css = generateFontCSS(font, modalAxis);
+    const css = generateFontCSS(font, modalAxis, modalVariant);
 
     try {
       if ("clipboard" in navigator && window.isSecureContext) {
@@ -796,14 +849,22 @@ export default function FontModal() {
         <SpecimenColumn
           lang={lang}
           font={font}
-          fontFamilyCss={familyCSS(font, modalAxis)}
-          fontVariation={fontVariationSettingsCSS(font, modalWeight, modalAxis)}
+          fontFamilyCss={familyCSS(font, modalAxis, modalVariant)}
+          fontVariation={fontVariationSettingsCSS(
+            font,
+            modalWeight,
+            modalAxis,
+            modalVariant
+          )}
           effectiveSize={effectiveSize}
           fontLoaded={fontLoaded}
           loadError={loadError}
           axes={axes}
           axis={modalAxis}
           onAxisChange={setModalAxis}
+          variants={variants}
+          variant={modalVariant}
+          onVariantChange={setModalVariant}
           weights={weights}
           weight={modalWeight}
           onWeightChange={setModalWeight}

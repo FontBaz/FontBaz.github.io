@@ -20,6 +20,12 @@ export type FontAxisOption = {
   name: string;
 };
 
+export type FontVariant = {
+  id: string;
+  name?: LocalizedString;
+  woff2?: string;
+};
+
 export type Font = {
   family: string;
   name?: LocalizedString;
@@ -39,6 +45,7 @@ export type Font = {
   isVariable?: boolean;
   axes?: FontAxisDef[];
   styles?: string[];
+  variants?: FontVariant[];
   woff2?: string;
   _loaded?: Record<string, boolean | undefined>;
   _loading?: Record<string, Promise<boolean> | undefined>;
