@@ -11,6 +11,7 @@ export const HERO_SLIDES: HeroSlide[] = [
   { image: "iranNastaliq.webp", family: "iranNastaliq" },
   { image: "mikhak.webp", family: "mikhak" },
   { image: "rooyinFree.webp", family: "rooyinFree" },
+  { image: "kuhmard.webp", family: "kuhmard" },
   { image: "vira.webp", family: "vira" },
   { image: "xb-titre.webp", family: "xb-titre" },
   { image: "xp-vosta.webp", family: "xp-vosta" },
